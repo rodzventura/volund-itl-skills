@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="itl-design-system" content="/*ITL:VERSAO*/">
+<title>/*ITL:TITULO*/</title>
+<style>
+/*ITL:FONTES*/
+</style>
+<style>
+/*ITL:CSS*/
+/* ---------- casca do deck ---------- */
+html,body{margin:0;height:100%;background:#0A0103;overflow:hidden}
+#fit{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:50% 50%}
+#palco>section.itl{display:none}
+#palco>section.itl.on{display:block}
+#pg{position:fixed;left:16px;bottom:12px;display:flex;align-items:center;gap:10px;font:500 13px "DM Mono",monospace;color:rgba(255,255,255,.5);pointer-events:none;z-index:9}
+#pg i{width:8px;height:8px;border-radius:50%;background:#626262}
+#pg i.ok{background:#5BD68A;box-shadow:0 0 8px #5BD68A}
+#pg i.falha{background:#FC9155}
+#notas{display:none;position:fixed;left:0;right:0;bottom:0;max-height:32vh;overflow:auto;background:rgba(10,1,3,.94);border-top:1px solid #3A1620;color:#F5F5F5;font:400 18px/1.5 "Helvetica Neue",Arial,sans-serif;padding:18px 28px 36px;z-index:8}
+body.com-notas #notas{display:block}
+body.geral{overflow:auto}
+body.geral #fit{position:static;transform:none!important;width:auto;height:auto;padding:32px 40px 80px}
+body.geral #palco{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+body.geral #palco>section.itl{display:block;position:relative;zoom:var(--kg);cursor:zoom-in;border-radius:12px}
+@page{size:1920px 1080px;margin:0}
+@media print{html,body{overflow:visible;background:none;height:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}#fit{position:static;transform:none!important}#palco>section.itl{display:block!important;position:relative;break-after:page}#pg,#notas{display:none!important}*,*::before,*::after{animation:none!important;transition:none!important}.itl-pacote,.itl-fusivel,.itl-clarao,.itl-choque{display:none!important}}
+</style>
+</head>
+<body data-ano="/*ITL:ANO*/">
+<div id="fit"><div id="palco">
+/*ITL:SLIDES*/
+</div></div>
+<div id="pg"><i title="Tela sempre ativa"></i><span></span></div>
+<div id="notas"></div>
+<script>window.ITL_ASSETS=/*ITL:ASSETS*/{};</script>
+<script type="application/json" id="itl-imagens">/*ITL:IMAGENS*/</script>
+<script>
+/*ITL:MOTOR*/
+</script>
+</body>
+</html>

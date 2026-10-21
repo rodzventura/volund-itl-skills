@@ -1,0 +1,15 @@
+{
+  "meta": { "marca": "Volund", "versao": "1.0.0", "fonte": "Figma Volund | In The Loop (nodes 1-54 e 73-16)" },
+  "design_system": { "in-the-loop": "1.0.0" },
+  "cor": {
+    "fundo": "#160307", "crimson": "#EC3E61", "ambar": "#FC9155",
+    "texto": "#F5F5F5", "cinza-300": "#ABABAB", "cinza-500": "#7A7A7A", "cinza-600": "#626262", "cinza-800": "#313131"
+  },
+  "gradiente": { "barra": "linear-gradient(255deg, #FC9155 0%, #EC3E61 45%)" },
+  "fonte": {
+    "texto": "Helvetica Neue (reserva: Arimo, embutida)",
+    "mono": "DM Mono (rótulos, números, numerais de seção)"
+  },
+  "superficies": ["Shape 1 (capa, aberturas, encerramento)", "Ellipse 1 (anéis do prêmio)", "∞ luminoso (citação)"],
+  "palco": { "largura": 1920, "altura": 1080, "colunas": 12, "margem": 100 }
+}

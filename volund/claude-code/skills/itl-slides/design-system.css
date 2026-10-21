@@ -1,0 +1,356 @@
+/* ==========================================================================
+   In The Loop · design system v1.0.0 (volund-tokens 1.0.0)
+   Direção "Escala" aprovada em out/2026: tipografia monumental e cinética,
+   máscaras de linha, camadas de profundidade, glows da marca só nos slides.
+
+   Regra de ouro: o slide só usa as classes itl-* e os tokens daqui.
+   Nada de font-family, cor em hex/rgb ou CSS solto no conteúdo.
+   O CSS padrão de cada peça é o ESTADO FINAL (é o que sai no PDF);
+   animação só existe sob section.itl.run.
+   Cada componente traz um comentário "@componente" lido pelo `itl.py componentes`.
+   ========================================================================== */
+
+/* ---------- tokens ---------- */
+:root{
+  --bg:#160307; --crimson:#EC3E61; --amber:#FC9155;
+  --w50:#F5F5F5; --g300:#ABABAB; --g500:#7A7A7A; --g600:#626262; --g800:#313131;
+  --texto:"Helvetica Neue",Helvetica,"ITL Reserva",Arial,sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --ease2:cubic-bezier(.7,0,.2,1);
+  /* grade do palco 1920×1080: 12 colunas, margem 100 */
+  --m:100px; --topo:190px; --pe:110px; --gap:40px;
+  /* escala tipográfica (fechada) */
+  --t-palavra:320px; --t-gigante:236px; --t-g:150px; --t-frase:100px; --t-titulo:96px; --t-m:64px;
+  --t-sub:44px; --t-h3:46px; --t-texto:26px; --t-kicker:22px; --t-cap:20px;
+}
+html.reserva{--texto:"ITL Reserva",Arial,sans-serif}
+
+/* ---------- slide ---------- */
+section.itl{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;font-family:var(--texto);-webkit-font-smoothing:antialiased;box-sizing:border-box}
+:where(section.itl){color:var(--w50);background:var(--bg)}
+:where(section.itl) *{margin:0;padding:0;box-sizing:border-box}
+:where(section.itl) :is(ul,ol){list-style:none}
+:where(section.itl) img{display:block;max-width:100%}
+section.itl .itl-notas{display:none}
+.itl-destaque,section.itl em{font-style:normal;color:var(--crimson)}
+
+/* @componente slide · <section class="itl">. data-limpo = sem masthead, grade e paginação (capa, abertura, prêmio, polos). data-agenda="Nome" marca o slide que abre um bloco na agenda. */
+/* @componente masthead, grade e paginação · gerados pelo motor em todo slide sem data-limpo */
+.itl-grade i{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.045);transform-origin:top;z-index:0}
+.itl-mast{position:absolute;top:40px;left:40px;right:40px;height:24px;font:700 16px/24px var(--texto);color:var(--g600);letter-spacing:.02em;z-index:6}
+.itl-mast span:nth-child(2){position:absolute;left:310px}
+.itl-mast img{position:absolute;right:0;top:4px;width:140px;opacity:.55}
+.itl-pg{position:absolute;right:40px;bottom:36px;font:400 15px var(--mono);letter-spacing:.08em;color:var(--g600);z-index:6}
+.itl-pg b{color:var(--crimson);font-weight:500}
+.itl-logo-sm{position:absolute;left:40px;top:40px;width:135px;z-index:6}
+.itl-glow{position:absolute;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.itl-glow>div{flex:none}
+.itl-glow img{width:100%;height:100%;object-fit:contain}
+
+/* ---------- layout ---------- */
+/* @componente itl-area · a caixa de conteúdo do slide (margem 100, topo 190, acima da paginação). Todo texto mora aqui dentro ou num componente de tela cheia. .centro · .base (conteúdo no pé) */
+.itl-area{position:absolute;left:var(--m);right:var(--m);top:var(--topo);bottom:var(--pe);display:flex;flex-direction:column;gap:48px;z-index:2}
+.itl-area.centro{align-items:center;justify-content:center;text-align:center}
+.itl-area.base{justify-content:flex-end}
+/* @componente itl-corpo · ocupa o espaço que sobra abaixo do cabeçalho. .base alinha o conteúdo no pé; .centro no meio */
+.itl-corpo{flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--gap)}
+.itl-corpo.base{justify-content:flex-end}
+.itl-corpo.centro{justify-content:center}
+/* @componente itl-colunas · duas colunas (--div = largura da 1ª, padrão 1fr) com .itl-col dentro. .fim alinha a coluna à direita; .base empurra para o pé */
+.itl-colunas{display:grid;grid-template-columns:var(--div,1fr) 1fr;gap:80px;flex:1;min-height:0}
+.itl-col{display:flex;flex-direction:column;gap:36px;min-width:0}
+.itl-col.fim{align-items:flex-end;text-align:right}
+.itl-col.base{justify-content:flex-end}
+.itl-col.meio{justify-content:center}
+/* @componente itl-grid-2/3/4 · colunas iguais */
+.itl-grid-2,.itl-grid-3,.itl-grid-4{display:grid;gap:var(--gap)}
+.itl-grid-2{grid-template-columns:repeat(2,1fr)}.itl-grid-3{grid-template-columns:repeat(3,1fr)}.itl-grid-4{grid-template-columns:repeat(4,1fr)}
+
+/* ---------- tipografia ---------- */
+/* @componente itl-cab · cabeçalho: kicker + título (+ subtítulo) */
+.itl-cab{display:flex;flex-direction:column;align-items:flex-start;gap:24px}
+.itl-area.centro .itl-cab{align-items:center}
+/* @componente itl-kicker · rótulo em DM Mono crimson, caixa-alta, acima do título */
+.itl-kicker{font:500 var(--t-kicker)/1.2 var(--mono);letter-spacing:.08em;color:var(--crimson);text-transform:uppercase}
+/* @componente itl-titulo · título do slide (96px). .g = editorial 150 (até 2 linhas) · .m = 64 · data-linhas="N" limita as linhas (o motor encolhe até caber) */
+.itl-titulo{font:500 var(--t-titulo)/1.02 var(--texto);letter-spacing:-.025em;max-width:1720px}
+.itl-titulo.g{font-size:var(--t-g);line-height:.98;letter-spacing:-.045em}
+.itl-titulo.m{font-size:var(--t-m)}
+/* @componente itl-gigante · título monumental de uma linha (236px), encolhe sozinho para caber na largura */
+.itl-gigante{font:500 var(--t-gigante)/1 var(--texto);letter-spacing:-.05em;white-space:nowrap}
+/* @componente itl-palavra · palavra gigante de produto (320px), uma linha, encolhe para caber; o slide com palavra começa mais alto (topo 96) */
+section.itl:has(.itl-palavra) .itl-area{top:96px;gap:24px}
+.itl-palavra{font:500 var(--t-palavra)/1 var(--texto);letter-spacing:-.06em;white-space:nowrap;margin-left:-16px}
+/* @componente itl-sub · subtítulo (44px, cinza) · itl-texto · corpo (26px) · itl-cap · legenda mono caixa-alta (20px) */
+.itl-sub{font:400 var(--t-sub)/1.2 var(--texto);letter-spacing:-.01em;color:var(--g300)}
+.itl-texto{font:400 var(--t-texto)/1.45 var(--texto);color:var(--g300);max-width:760px}
+.itl-texto+.itl-texto{margin-top:-16px}
+.itl-cap{font:400 var(--t-cap)/1.4 var(--mono);letter-spacing:.1em;color:var(--g300);text-transform:uppercase}
+.itl-forte{color:var(--w50);font-weight:500}
+/* @componente itl-filete · linha de 1px que se desenha da esquerda */
+.itl-filete{height:1px;background:rgba(255,255,255,.2);transform-origin:left;flex:none}
+
+/* ---------- números ---------- */
+/* @componente itl-numero · número em DM Mono crimson; encolhe para caber na largura do container. Tamanho por --n (padrão 240px). Com data-conta conta até o valor; com data-de="4" e valor inteiro de até 2 dígitos vira odômetro */
+.itl-numero{font:400 var(--n,240px)/1 var(--mono);color:var(--crimson);letter-spacing:-.06em;white-space:nowrap;display:flex;align-items:flex-start}
+.itl-numero.branco{color:var(--w50)}
+.itl-dg{display:block;height:1em;overflow:hidden}
+.itl-strip{display:flex;flex-direction:column;transform:translateY(calc(var(--para) * -1em));transition:transform 2.6s cubic-bezier(.2,.85,.1,1)}
+.itl-dg:first-child .itl-strip{transition-delay:.25s}
+.itl-pendente .itl-strip{transform:translateY(calc(var(--de) * -1em));transition:none}
+/* @componente itl-apoio · lista curta de números de apoio com filetes (número mono + frase) */
+.itl-apoio{display:flex;flex-direction:column;max-width:640px}
+.itl-apoio li{display:flex;align-items:baseline;gap:26px;padding:22px 0;border-top:1px solid rgba(255,255,255,.2)}
+.itl-apoio li>b{font:400 64px/1 var(--mono);color:var(--crimson);letter-spacing:-.04em;min-width:96px;white-space:nowrap}
+.itl-apoio li>span{font:400 22px/1.35 var(--texto);color:var(--g300)}
+/* @componente itl-metricas · 2 a 4 .itl-metrica lado a lado, todas do mesmo tamanho; uma .itl-metrica.destaque vira o número principal (grande, crimson, primeira coluna larga) e as outras ficam brancas */
+.itl-metricas{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:var(--gap);align-items:start}
+.itl-metricas:has(.destaque){grid-template-columns:820px;grid-auto-columns:1fr}
+.itl-metrica{display:flex;flex-direction:column;gap:22px;min-width:0;border-top:1px solid rgba(255,255,255,.2);padding-top:28px}
+.itl-metrica .itl-numero{--n:120px}
+.itl-metrica p{font:400 22px/1.4 var(--texto);color:var(--g300)}
+.itl-metrica .itl-cap{font-size:18px}
+.itl-metricas:has(.destaque) .itl-metrica:not(.destaque) .itl-numero{color:var(--w50);--n:110px}
+.itl-metrica.destaque{order:-1}
+.itl-metrica.destaque .itl-numero{--n:220px}
+.itl-metrica.destaque p{font-size:30px;color:var(--w50);max-width:760px}
+
+/* @componente itl-barras · barras horizontais em percentual: .itl-barra com --v (0–100), rótulo, <small> detalhe e <b> valor. .meta = linha de meta tracejada */
+.itl-barras{display:flex;flex-direction:column}
+.itl-barra{display:grid;grid-template-columns:440px 1fr 220px;align-items:center;height:104px}
+.itl-barra>p{font:400 26px/1.2 var(--texto)}
+.itl-barra>p>small{display:block;font:400 15px var(--mono);letter-spacing:.08em;color:var(--g600);text-transform:uppercase;margin-top:6px}
+.itl-barra .trilho{position:relative;height:52px;background:rgba(255,255,255,.05);border-radius:4px}
+.itl-barra .trilho i{position:absolute;left:0;top:0;bottom:0;width:calc(var(--v) * 1%);border-radius:4px;background:linear-gradient(255deg,var(--amber) 0%,var(--crimson) 45%);transform-origin:left}
+.itl-barra.meta .trilho{background:repeating-linear-gradient(135deg,rgba(236,62,97,.16) 0 2px,transparent 2px 14px);border:1px dashed rgba(236,62,97,.7)}
+.itl-barra.meta .trilho i{background:none;width:2px;left:calc(var(--v) * 1% - 1px);top:-10px;bottom:-10px;background:var(--crimson)}
+.itl-barra>b{font:400 64px var(--mono);color:var(--crimson);text-align:right;letter-spacing:-.04em;font-weight:400}
+.itl-barra.meta>b{color:var(--g300)}
+
+/* ---------- conteúdo ---------- */
+/* @componente itl-topicos · 2 a 4 tópicos editoriais lado a lado (.itl-topico com h3 e p); o motor numera 01, 02… e desenha os filetes */
+.itl-topicos{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:120px}
+.itl-topicos:has(>:nth-child(3)){gap:80px}
+.itl-topico{display:flex;flex-direction:column;gap:16px;border-top:1px solid rgba(255,255,255,.2);padding-top:28px;min-width:0}
+.itl-topico::before{content:counter(t,decimal-leading-zero);counter-increment:t;font:400 22px var(--mono);letter-spacing:.08em;color:var(--crimson);margin-bottom:2px}
+.itl-topicos{counter-reset:t}
+.itl-topico h3{font:500 50px/1.08 var(--texto);letter-spacing:-.02em}
+.itl-topico p{font:400 25px/1.45 var(--texto);color:var(--g300)}
+.itl-topicos:has(>:nth-child(3)) h3{font-size:42px}
+.itl-topicos:has(>:nth-child(4)) h3{font-size:36px}
+.itl-topicos:has(>:nth-child(4)) p{font-size:21px}
+/* @componente itl-lista · lista numerada com fios (3 a 6 itens) */
+.itl-lista{counter-reset:l;display:flex;flex-direction:column}
+.itl-lista li{display:grid;grid-template-columns:90px 1fr;align-items:baseline;padding:30px 0 32px;border-top:1px solid rgba(255,255,255,.14);font:500 42px/1.18 var(--texto);letter-spacing:-.015em}
+.itl-lista li::before{content:counter(l,decimal-leading-zero);counter-increment:l;font:400 22px var(--mono);color:var(--crimson);letter-spacing:.08em}
+.itl-lista:has(>:nth-child(5)) li{font-size:36px;padding:22px 0 24px}
+/* @componente itl-fluxo · etapas ligadas por uma linha que um pacote de luz percorre (3 a 5 <li> com <small> quando, <b> nome, <span> descrição) */
+.itl-fluxo{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;padding-top:0}
+.itl-fluxo::before,.itl-fluxo::after{content:"";position:absolute;top:79px;left:calc(50% / var(--n,4));right:calc(50% / var(--n,4));height:2px;background:rgba(255,255,255,.14);transform-origin:left;z-index:0}
+.itl-fluxo::after{top:78px;height:4px;background:var(--crimson);box-shadow:0 0 16px rgba(236,62,97,.8)}
+.itl-fluxo li{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:0 16px;--t:calc(.5s + 3s * var(--i) / (var(--n) - 1))}
+.itl-fluxo li::before{content:counter(f,decimal-leading-zero);counter-increment:f;width:160px;height:160px;border-radius:50%;border:2px solid var(--crimson);background:radial-gradient(circle,rgba(236,62,97,.35),rgba(236,62,97,.08) 70%),var(--bg);box-shadow:0 0 50px rgba(236,62,97,.35);display:flex;align-items:center;justify-content:center;font:400 44px var(--mono);color:var(--w50);margin-bottom:26px;position:relative;z-index:2}
+.itl-fluxo{counter-reset:f}
+.itl-fluxo li>small{font:400 18px var(--mono);letter-spacing:.1em;color:var(--crimson);text-transform:uppercase}
+.itl-fluxo li>b{font:500 34px/1.1 var(--texto);letter-spacing:-.01em}
+.itl-fluxo li>span{font:400 20px/1.35 var(--texto);color:var(--g300)}
+.itl-pacote{position:absolute;top:70px;left:calc(50% / var(--n,4) - 10px);width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 0 6px rgba(236,62,97,.35),0 0 40px 12px rgba(236,62,97,.85);opacity:0;z-index:3}
+/* @componente itl-numeros · fileira de números de resultado abaixo de um fluxo (mesmas colunas): <div class="itl-numeros"><div><b data-conta>411</b><span>legenda</span></div>…</div> */
+.itl-numeros{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border-top:1px solid rgba(255,255,255,.2);padding-top:40px}
+.itl-numeros>div{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:0 16px}
+.itl-numeros>div>b{font:400 76px/1 var(--mono);color:var(--crimson);letter-spacing:-.04em;white-space:nowrap}
+.itl-numeros>div>span{font:400 19px/1.35 var(--texto);color:var(--g300)}
+/* @componente itl-citacao · frase centralizada com o ∞ luminoso atrás (tela cheia). <blockquote class="itl-citacao"><p class="itl-kicker">…</p><p class="itl-frase">…</p><cite>Autor · cargo</cite></blockquote> */
+.itl-citacao{position:absolute;left:140px;right:140px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:44px;z-index:2}
+.itl-frase{font:500 var(--t-frase)/1.08 var(--texto);letter-spacing:-.04em;width:1640px}
+.itl-citacao cite{font:400 22px var(--mono);font-style:normal;letter-spacing:.1em;color:var(--g300);text-transform:uppercase}
+.itl-glow.infinito{left:620px;top:34px;width:680px;height:1013px;transform:rotate(84deg);opacity:.6;z-index:0}
+.itl-glow.infinito img{animation:itlRespira 6s ease-in-out infinite}
+
+/* ---------- pessoas e imagens ---------- */
+/* @componente itl-tiras · o time em tiras verticais (2 a 6 .itl-pessoa: foto + <b> nome, <span> papel, <small> detalhe). A foto entra em P&B e ganha cor */
+.itl-tiras{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,400px);gap:20px}
+.itl-pessoa .itl-foto{height:470px;overflow:hidden;border-radius:4px}
+.itl-pessoa .itl-foto img{width:100%;height:100%;object-fit:cover}
+.itl-pessoa figcaption>b{display:block;font:500 27px var(--texto);margin-top:22px;letter-spacing:-.01em}
+.itl-pessoa figcaption>span{display:block;font:400 14px var(--mono);letter-spacing:.08em;color:var(--g300);margin-top:8px;text-transform:uppercase}
+.itl-pessoa figcaption>small{display:block;font:400 14px var(--mono);letter-spacing:.08em;color:var(--crimson);margin-top:6px;text-transform:uppercase}
+/* @componente itl-captura · moldura de tela de produto que entra em perspectiva 3D. Altura por height (padrão: a da imagem) */
+.itl-captura{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.12);background:#0d0204;z-index:2}
+.itl-captura img{width:100%;height:100%;object-fit:cover;object-position:var(--foco,50% 0)}
+/* @componente itl-imagens · 1 a 3 .itl-figura lado a lado (imagem inteira, sem corte, com legenda opcional em <figcaption>) */
+.itl-imagens{flex:1;min-height:0;display:flex;gap:var(--gap)}
+.itl-figura{flex:1;min-width:0;display:flex;flex-direction:column;gap:22px}
+.itl-figura>div{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.itl-figura img{max-width:100%;max-height:100%;border-radius:12px;border:1px solid rgba(255,255,255,.12);box-shadow:0 40px 120px rgba(0,0,0,.6)}
+.itl-figura figcaption{font:400 18px var(--mono);letter-spacing:.1em;color:var(--g300);text-transform:uppercase;text-align:center}
+/* @componente itl-lateral · imagem sangrada na metade direita do slide; a itl-area encolhe para a esquerda */
+.itl-lateral{position:absolute;left:960px;top:0;width:960px;height:1080px;overflow:hidden;z-index:1}
+.itl-lateral img{width:100%;height:100%;object-fit:cover;object-position:var(--foco,50% 50%)}
+.itl-lateral::after{content:"";position:absolute;left:0;right:0;top:0;height:180px;background:linear-gradient(180deg,rgba(22,3,7,.75),rgba(22,3,7,0));pointer-events:none}
+section.itl:has(>.itl-lateral) .itl-area{right:1060px}
+/* @componente pedido de imagem · <div data-pedido="o que é preciso" data-referencia="img/foto-enviada.jpg"></div> no lugar de uma imagem que o design vai produzir */
+.itl-pedido{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:24px;width:100%;height:100%;min-height:200px;border:2px dashed rgba(236,62,97,.55);border-radius:12px;background:repeating-linear-gradient(135deg,rgba(236,62,97,.07) 0 2px,transparent 2px 16px);font:400 22px/1.35 var(--texto);color:var(--g300)}
+.itl-pedido::before{content:"Imagem pedida ao design";font:400 16px var(--mono);letter-spacing:.12em;color:var(--crimson);text-transform:uppercase}
+
+/* ---------- telas do design (capa, abertura, agenda, polos, prêmio) ---------- */
+/* @componente itl-capa · capa do evento: logo In the loop, Shape e Volund vêm do motor; o conteúdo é o bloco de tópicos <ul class="itl-capa"><li>Balanço trimestral</li><li><b>Q3</b> · Outubro · 2026</li><li>Recife — São Paulo</li></ul> */
+.itl-capa{position:absolute;left:1560px;top:752px;width:320px;font:400 18px var(--mono);letter-spacing:.1em;color:var(--g300);text-transform:uppercase;z-index:2}
+.itl-capa li{padding:18px 0;border-top:1px solid rgba(255,255,255,.2)}
+.itl-capa li:last-child{border-bottom:1px solid rgba(255,255,255,.2)}
+.itl-capa li>b{color:var(--crimson);font-weight:500}
+.itl-capa-shape{left:757px;top:-389px;width:1225px;height:1825px;transform:rotate(23.2deg);z-index:1}
+.itl-capa-shape img{object-fit:fill;animation:itlFlutua 10s ease-in-out infinite alternate}
+.itl-capa-logo{position:absolute;left:195px;width:616px;overflow:hidden;z-index:2}
+.itl-capa-logo img{position:absolute;left:0;width:616px;max-width:none}
+.itl-capa-logo.l1{top:210px;height:240px}
+.itl-capa-logo.l2{top:450px;height:252px}
+.itl-capa-logo.l2 img{top:-240px}
+.itl-capa-volund{position:absolute;left:195px;top:890px;width:240px;z-index:2}
+/* @componente itl-abertura · abertura de bloco: <div class="itl-abertura"><h1 class="itl-gigante">Squad Alfa</h1><p class="itl-sub">linha de apoio</p><p class="itl-quem"><b>Nome</b><span>Cargo</span></p></div>. O número do bloco (01, 02…) é contado pelo motor. Retrato recortado (só design): <img class="itl-retrato"> */
+.itl-abertura{position:absolute;inset:0;z-index:2}
+.itl-abertura .itl-gigante{position:absolute;left:84px;top:196px;max-width:1750px;z-index:2}
+.itl-abertura .itl-sub{position:absolute;left:100px;top:480px;width:1300px}
+.itl-abertura:has(.itl-retrato) .itl-sub{display:none}
+.itl-retrato{position:absolute;left:700px;bottom:0;width:1206px;height:1080px;object-fit:contain;object-position:50% 100%;z-index:3}
+.itl-quem{position:absolute;left:100px;top:800px;display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:40px;align-items:center;z-index:4}
+.itl-quem::before{content:attr(data-n);grid-row:1/3;font:400 200px/1 var(--mono);color:var(--crimson);letter-spacing:-.03em}
+.itl-quem>b{font:500 56px var(--texto);letter-spacing:-.02em;align-self:end}
+.itl-quem>span{font:400 26px var(--mono);letter-spacing:.06em;color:var(--g300);text-transform:uppercase;align-self:start;margin-top:10px}
+.itl-shape{left:435px;top:-392px;width:1844.7px;height:1897.5px;z-index:0}
+.itl-shape>div{width:1065.5px;height:1587.5px;transform:rotate(-139.1deg)}
+.itl-shape img{object-fit:cover}
+/* @componente itl-fecho · frase de encerramento de bloco em tipografia gigante (2 linhas) + legenda; o glow vem do motor */
+.itl-fecho{position:absolute;left:100px;top:300px;width:1600px;display:flex;flex-direction:column;gap:120px;z-index:2}
+.itl-fecho .itl-titulo{font-size:180px;line-height:1;letter-spacing:-.05em}
+/* @componente itl-agenda · agenda do dia: <ol class="itl-agenda" data-atual="1"><li><b>Bloco</b><span>quem apresenta</span></li>…</ol>. Sem contagem de slides. data-atual acende um item e apaga os outros */
+.itl-agenda{display:flex;flex-direction:column;position:relative;counter-reset:a;--rh:108px;--fs:80px}
+.itl-agenda:has(>:nth-child(8)){--rh:96px;--fs:70px}
+.itl-agenda li{display:grid;grid-template-columns:100px 1fr 420px;align-items:baseline;height:var(--rh);border-top:1px solid rgba(255,255,255,.12);padding-top:16px}
+.itl-agenda li::before{content:counter(a,decimal-leading-zero);counter-increment:a;font:400 22px var(--mono);color:var(--crimson)}
+.itl-agenda li>b{font:500 var(--fs)/1 var(--texto);letter-spacing:-.035em;white-space:nowrap}
+.itl-agenda li>span{font:400 18px var(--mono);letter-spacing:.08em;color:var(--g600);text-align:right;text-transform:uppercase}
+.itl-agenda li.apagado>b{color:var(--g500)}
+.itl-agenda-barra{position:absolute;left:-16px;top:0;width:4px;height:var(--rh);background:var(--crimson);box-shadow:0 0 18px var(--crimson);transform:translateY(calc(var(--atual,0) * var(--rh)))}
+/* @componente itl-polos · tela dividida com duas cidades: <div class="itl-polos"><figure class="itl-polo"><img src style="--foco:50% 0%;--zoom:1.5"><figcaption><b>Recife</b><span>Pernambuco</span></figcaption></figure>…</div> */
+.itl-polos{position:absolute;inset:0;z-index:1}
+.itl-polo{position:absolute;top:0;width:960px;height:1080px;overflow:hidden}
+.itl-polo:nth-child(2){left:960px}
+.itl-polo img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:var(--foco,50% 50%);transform:scale(var(--zoom,1));transform-origin:var(--foco,50% 50%)}
+.itl-polo>.itl-pedido{position:absolute;inset:140px 60px 320px;width:auto;height:auto}
+.itl-polo::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(22,3,7,.6) 0%,rgba(22,3,7,0) 28%,rgba(22,3,7,0) 52%,rgba(22,3,7,.94) 100%)}
+.itl-polo figcaption{position:absolute;left:60px;right:60px;bottom:76px;z-index:2;display:flex;flex-direction:column;gap:16px}
+.itl-polo figcaption>b{font:500 170px/1 var(--texto);letter-spacing:-.05em;white-space:nowrap}
+.itl-polo figcaption>span{font:400 18px var(--mono);letter-spacing:.16em;color:var(--g300);text-transform:uppercase;padding-left:6px}
+.itl-polos::after{content:"";position:absolute;left:959px;top:0;width:2px;height:1080px;background:var(--crimson);z-index:3;transform-origin:top}
+.itl-polos~.itl-area{top:140px}
+.itl-polos~.itl-area .itl-kicker{color:var(--w50)}
+/* @componente itl-premio · abertura de premiação: <h1 class="itl-premio">Nome do Prêmio</h1>. Traço de luz, anéis que colidem, clarão e letras vêm do motor. Sem tremor */
+.itl-premio{position:absolute;left:100px;right:100px;top:440px;text-align:center;font:500 200px/1 var(--texto);letter-spacing:-.04em;white-space:nowrap;z-index:3}
+.itl-premio>span{display:inline-block}
+.itl-anel{top:-213px;width:1507px;height:1506px;mix-blend-mode:screen;z-index:0}
+.itl-anel>div{width:1506px;height:1507px}
+.itl-anel img{animation:itlPulsa 6s ease-in-out infinite}
+.itl-anel.e{left:-581px}.itl-anel.e>div{transform:rotate(-90deg)}
+.itl-anel.d{left:994px}.itl-anel.d>div{transform:rotate(90deg)}
+.itl-fusivel{position:absolute;left:0;top:539px;width:1920px;height:2px;background:linear-gradient(90deg,transparent,var(--crimson) 30%,#fff 50%,var(--crimson) 70%,transparent);opacity:0;z-index:1}
+.itl-clarao{position:absolute;left:960px;top:540px;width:1200px;height:1200px;margin:-600px 0 0 -600px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(252,145,85,.7) 14%,rgba(236,62,97,.35) 34%,rgba(236,62,97,0) 62%);opacity:0;z-index:2;pointer-events:none}
+.itl-choque{position:absolute;left:960px;top:540px;z-index:2}
+.itl-choque i{position:absolute;left:-150px;top:-150px;width:300px;height:300px;border-radius:50%;border:3px solid var(--crimson);opacity:0}
+.itl-premio-logo{position:absolute;left:893px;top:870px;width:135px;z-index:3}
+/* @componente itl-vencedor · revelação de quem venceu: <div class="itl-vencedor" data-premio="Nome do Prêmio"><b>Nome</b><img src="retrato.png"><b>Sobrenome</b></div>. Nome atrás da foto, sobrenome crimson na frente, o prêmio vazado ao fundo; a foto sobe escura e ganha cor */
+.itl-vencedor{position:absolute;inset:0}
+.itl-vencedor>b{position:absolute;font:500 300px/1 var(--texto);letter-spacing:-.055em;white-space:nowrap}
+.itl-vencedor>b:first-of-type{left:84px;top:186px;z-index:1;max-width:1752px}
+.itl-vencedor>b:last-of-type{right:84px;top:690px;color:var(--crimson);z-index:3;max-width:1752px}
+.itl-vencedor>img,.itl-vencedor>.itl-pedido{position:absolute;left:585px;bottom:0;width:750px;height:1000px;object-fit:contain;object-position:50% 100%;z-index:2}
+.itl-vencedor>.itl-pedido{height:820px;bottom:60px;width:600px;left:660px;background-color:rgba(22,3,7,.82)}
+.itl-eco{position:absolute;left:-700px;white-space:nowrap;font:500 150px/1 var(--texto);letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.2px rgba(236,62,97,.32);z-index:0}
+.itl-vencedor-k{position:absolute;left:84px;bottom:64px;z-index:3}
+
+/* ---------- movimento (só sob .run; o padrão é o estado final) ---------- */
+@keyframes itlSobe{from{opacity:0;transform:translateY(28px)}}
+@keyframes itlSurge{from{opacity:0}}
+@keyframes itlLinha{from{transform:translateY(108%)}}
+@keyframes itlX{from{transform:scaleX(0)}}
+@keyframes itlY{from{transform:scaleY(0)}}
+@keyframes itlCortina{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0)}}
+@keyframes itlCortinaE{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0)}}
+@keyframes itlKb{from{transform:scale(calc(var(--zoom,1) * 1.18))}}
+@keyframes itlFotoSobe{from{opacity:0;transform:translateY(7%) scale(1.06)}}
+@keyframes itlRevela{0%{filter:brightness(.04) saturate(0)}45%{filter:brightness(.12) saturate(.3)}100%{filter:none}}
+@keyframes itlInclina{from{opacity:0;transform:perspective(1600px) rotateX(28deg) translateY(240px) scale(.92)}}
+@keyframes itlCor{0%{filter:grayscale(1) brightness(.7);transform:scale(1.15)}55%{filter:grayscale(1) brightness(.9)}100%{filter:none;transform:none}}
+@keyframes itlFlutua{to{transform:translateY(-36px) scale(1.03)}}
+@keyframes itlRespira{50%{transform:scale(1.04);opacity:.85}}
+@keyframes itlPulsa{50%{opacity:.78}}
+@keyframes itlShapeCapa{from{opacity:0;transform:translate(200px,60px) rotate(30deg)}}
+@keyframes itlShape{from{opacity:0;transform:translate(-120px,80px) rotate(-8deg)}}
+@keyframes itlInfinito{from{opacity:0;transform:rotate(60deg) scale(.82)}}
+@keyframes itlNo{from{border-color:rgba(255,255,255,.22);background:var(--bg);box-shadow:none;color:var(--g600)}}
+@keyframes itlAnelSai{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(2)}}
+@keyframes itlPacote{0%{opacity:1;left:calc(50% / var(--n) - 10px)}96%{opacity:1}100%{opacity:0;left:calc(100% - 50% / var(--n) - 10px)}}
+@keyframes itlVarre{0%{transform:translateY(0)}50%{transform:translateY(var(--fim))}100%{transform:translateY(0)}}
+@keyframes itlVai{from{transform:translateY(0)}}
+@keyframes itlLetra{from{opacity:0;transform:translateY(45%) scale(1.35);filter:blur(14px)}}
+@keyframes itlClarao{0%{opacity:0;transform:scale(.2)}12%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
+@keyframes itlChoque{from{opacity:.95;transform:scale(.2)}to{opacity:0;transform:scale(4.2)}}
+@keyframes itlAnelE{from{opacity:0;transform:translateX(-1100px)}30%{opacity:1}}
+@keyframes itlAnelD{from{opacity:0;transform:translateX(1100px)}30%{opacity:1}}
+@keyframes itlFusivel{0%{opacity:1;transform:scaleX(0)}45%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1)}}
+@keyframes itlEcoEntra{from{opacity:0;transform:translateX(var(--de))}}
+@keyframes itlEcoAnda{to{transform:translateX(var(--para))}}
+@keyframes itlEmpurra{from{transform:scale(1.06)}}
+
+/* animação genérica: data-a="sobe" | "surge" | "linhas" (título por máscara de linha) | "filete" · --d vem do motor */
+.run [data-a=sobe]{animation:itlSobe .9s var(--ease) both;animation-delay:var(--d,0s)}
+.run [data-a=surge]{animation:itlSurge .9s ease both;animation-delay:var(--d,0s)}
+.itl-ln{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.itl-ln>span{display:block}
+.run .itl-ln>span{animation:itlLinha 1.15s var(--ease) both;animation-delay:calc(var(--d,0s) + var(--l,0) * .11s)}
+.run .itl-grade i{animation:itlY 1.4s var(--ease) both;animation-delay:calc(var(--k) * 45ms)}
+.run .itl-filete,.run .itl-metrica,.run .itl-topico,.run .itl-apoio li{animation:itlSurge .9s ease both;animation-delay:var(--d,0s)}
+.run .itl-barra{animation:itlSobe .8s var(--ease) both;animation-delay:calc(.2s + var(--k) * .14s)}
+.run .itl-barra .trilho i{animation:itlX 1.3s cubic-bezier(.2,1,.2,1) both;animation-delay:calc(.5s + var(--k) * .14s)}
+.run .itl-lista li{animation:itlSobe .8s var(--ease) both;animation-delay:calc(.5s + var(--k) * .12s)}
+.run .itl-fluxo::before{animation:itlX 1s var(--ease) .1s both}
+.run .itl-fluxo::after{animation:itlX 3s linear .5s both}
+.run .itl-pacote{animation:itlPacote 3s linear .5s both}
+.run .itl-fluxo li::before{animation:itlNo .5s ease both;animation-delay:var(--t)}
+.run .itl-fluxo li{animation:itlSobe .7s var(--ease) both;animation-delay:var(--t)}
+.run .itl-numeros{animation:itlSobe .8s var(--ease) 3.6s both}
+.run .itl-glow.infinito{animation:itlInfinito 2.4s var(--ease) both}
+.run .itl-pessoa .itl-foto{animation:itlCortina 1.1s var(--ease) both;animation-delay:calc(.3s + var(--k) * .1s)}
+.run .itl-pessoa .itl-foto img{animation:itlCor 2.6s ease both;animation-delay:calc(.3s + var(--k) * .1s)}
+.run .itl-pessoa figcaption{animation:itlSobe .8s var(--ease) both;animation-delay:calc(.8s + var(--k) * .1s)}
+.run .itl-captura,.run .itl-figura>div{animation:itlInclina 1.7s var(--ease) both;animation-delay:calc(.4s + var(--k) * .3s)}
+.run .itl-lateral{animation:itlCortinaE 1.3s var(--ease) .2s both}
+.run .itl-lateral img{animation:itlKb 8s ease-out .2s both}
+.run .itl-capa-shape{animation:itlShapeCapa 2.4s var(--ease) both}
+.run .itl-capa-logo img{animation:itlLinha 1.3s var(--ease) .2s both}
+.run .itl-capa-logo.l2 img{animation-delay:.36s}
+.run .itl-capa li{animation:itlSobe .9s var(--ease) both;animation-delay:calc(1s + var(--k) * .15s)}
+.run .itl-capa-volund{animation:itlSurge .9s ease 1s both}
+.run .itl-shape{animation:itlShape 2.2s var(--ease) both}
+.run .itl-retrato{animation:itlFotoSobe 1.5s var(--ease) .3s both}
+.run .itl-quem,.run .itl-abertura .itl-sub{animation:itlSobe .9s var(--ease) .9s both}
+.run .itl-agenda-barra{animation:itlVarre 2.6s var(--ease2) 1s both}
+.run .itl-agenda[data-atual] .itl-agenda-barra{animation:itlVai 1.6s var(--ease2) .8s both}
+.run .itl-polo{animation:itlCortina 1.3s var(--ease) both;animation-delay:calc(var(--k) * .18s)}
+.run .itl-polo img{animation:itlKb 8s ease-out both;animation-delay:calc(var(--k) * .18s)}
+.run .itl-polos::after{animation:itlY 1.2s var(--ease) .9s both}
+.run .itl-premio>span{animation:itlLetra .9s cubic-bezier(.2,1.2,.3,1) both;animation-delay:calc(1.5s + var(--i) * 45ms)}
+.run .itl-anel.e{animation:itlAnelE 1.1s cubic-bezier(.25,1.2,.4,1) .55s both}
+.run .itl-anel.d{animation:itlAnelD 1.1s cubic-bezier(.25,1.2,.4,1) .55s both}
+.run .itl-fusivel{animation:itlFusivel 1.45s var(--ease) both}
+.run .itl-clarao{animation:itlClarao 1.3s ease-out 1.45s both}
+.run .itl-choque i{animation:itlChoque 1.5s cubic-bezier(.1,.7,.3,1) both;animation-delay:calc(1.45s + var(--k) * .13s)}
+.run .itl-premio-logo{animation:itlSurge .9s ease 2.4s both}
+.run .itl-vencedor{animation:itlEmpurra 9s ease-out both}
+.run .itl-vencedor>img{animation:itlFotoSobe 1.6s var(--ease) 1.3s both,itlRevela 3.2s ease-out 1.3s both}
+.run .itl-eco{animation:itlEcoEntra 1.5s var(--ease) both,itlEcoAnda 18s linear infinite alternate;animation-delay:calc(var(--k) * .09s),calc(1.5s + var(--k) * .09s)}
+.run .itl-vencedor-k{animation:itlSurge .9s ease 2.7s both}
+.run .itl-logo-sm{animation:itlSurge .9s ease both}
+.estatico *,.estatico *::before,.estatico *::after{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){.run *,.run *::before,.run *::after{animation-duration:.01s!important;animation-delay:0s!important;transition:none!important}}

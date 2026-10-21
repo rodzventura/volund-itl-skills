@@ -1,0 +1,7 @@
+.DS_Store
+**/img/
+*.zip
+*.html
+!**/*.itl.html
+!**/template.html
+__pycache__/
