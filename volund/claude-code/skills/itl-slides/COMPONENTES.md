@@ -1,6 +1,6 @@
 # Componentes do design system In The Loop
 
-Gerado por `itl.py componentes` a partir de `design-system.css` (v1.0.0). Não editar à mão.
+Gerado por `itl.py componentes` a partir de `design-system.css` (v1.1.0). Não editar à mão.
 
 ## Slide
 
@@ -8,7 +8,7 @@ Gerado por `itl.py componentes` a partir de `design-system.css` (v1.0.0). Não e
 
 Animação genérica: `data-a="sobe"` · `"surge"` · `"linhas"` (título por máscara de linha; `data-linhas="2"` limita as linhas). Números: `data-conta` conta até o valor; `data-de="4"` num `.itl-numero` inteiro de até 2 dígitos vira odômetro.
 
-Modificadores aceitos (sem prefixo): `base`, `branco`, `centro`, `destaque`, `fim`, `g`, `m`, `meio`, `meta`.
+Modificadores aceitos (sem prefixo): `base`, `branco`, `centro`, `destaque`, `fim`, `g`, `m`, `meio`, `meta`, `rolagem`.
 
 Em `style` só entram as variáveis `--div`, `--foco`, `--n`, `--v`, `--zoom` (número ou token) e propriedades de layout: align-items, align-self, flex, gap, grid-column, grid-row, height, justify-content, justify-self, margin-top, max-width, min-height, order, text-align, width.
 
@@ -40,6 +40,7 @@ Imagem que ainda não existe: `<div data-pedido="o que é preciso" data-referenc
 - itl-citacao · frase centralizada com o ∞ luminoso atrás (tela cheia). <blockquote class="itl-citacao"><p class="itl-kicker">…</p><p class="itl-frase">…</p><cite>Autor · cargo</cite></blockquote>
 - itl-tiras · o time em tiras verticais (2 a 6 .itl-pessoa: foto + <b> nome, <span> papel, <small> detalhe). A foto entra em P&B e ganha cor
 - itl-captura · moldura de tela de produto que entra em perspectiva 3D. Altura por height (padrão: a da imagem)
+- itl-captura.rolagem · tela de produto mais alta que a moldura, que rola sozinha de cima para baixo, do início ao fim, dentro da moldura. Exige height na captura; a imagem ocupa a largura da moldura e a rolagem acompanha a altura real dela. Sem animação (PDF, ?estatico) mostra o topo
 - itl-imagens · 1 a 3 .itl-figura lado a lado (imagem inteira, sem corte, com legenda opcional em <figcaption>)
 - itl-lateral · imagem sangrada na metade direita do slide; a itl-area encolhe para a esquerda
 - pedido de imagem · <div data-pedido="o que é preciso" data-referencia="img/foto-enviada.jpg"></div> no lugar de uma imagem que o design vai produzir

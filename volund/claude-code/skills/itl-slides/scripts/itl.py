@@ -33,7 +33,7 @@ LIMITE_TITULO = {'g': 30, 'm': 80, '': 70}
 LIMITES = {'itl-gigante': 16, 'itl-palavra': 12, 'itl-sub': 80, 'itl-texto': 260, 'itl-frase': 100,
            'itl-kicker': 40, 'itl-cap': 60, 'itl-premio': 16}
 VOID = {'img', 'br', 'hr', 'meta', 'link', 'input', 'source', 'wbr'}
-MODIFICADORES = {'g', 'm', 'centro', 'base', 'fim', 'meio', 'destaque', 'branco', 'meta'}
+MODIFICADORES = {'g', 'm', 'centro', 'base', 'fim', 'meio', 'destaque', 'branco', 'meta', 'rolagem'}
 PROPS_LIVRES = {'grid-column', 'grid-row', 'align-self', 'justify-self', 'order', 'flex', 'width', 'max-width',
                 'height', 'min-height', 'text-align', 'gap', 'margin-top', 'align-items', 'justify-content'}
 TOKENS_LIVRES = {'n', 'v', 'div', 'foco', 'zoom'}
