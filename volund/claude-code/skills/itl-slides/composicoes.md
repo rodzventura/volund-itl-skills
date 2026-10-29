@@ -202,6 +202,7 @@ O design troca cada pedido por `<img src="img/retrato-ana.jpg" alt="Ana Lima">`.
   </div>
 </div>
 ```
+Tela longa que rola sozinha dentro da moldura: `<div class="itl-captura rolagem" style="height:740px">` (a altura é obrigatória; a imagem precisa ser mais alta que a moldura, ideal ≥ 1400 px de largura).
 
 ## Imagens (1 a 3, inteiras)
 

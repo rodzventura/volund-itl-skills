@@ -1,5 +1,5 @@
 /* ==========================================================================
-   In The Loop · design system v1.0.0 (volund-tokens 1.0.0)
+   In The Loop · design system v1.1.0 (volund-tokens 1.0.0)
    Direção "Escala" aprovada em out/2026: tipografia monumental e cinética,
    máscaras de linha, camadas de profundidade, glows da marca só nos slides.
 
@@ -179,6 +179,8 @@ section.itl:has(.itl-palavra) .itl-area{top:96px;gap:24px}
 /* @componente itl-captura · moldura de tela de produto que entra em perspectiva 3D. Altura por height (padrão: a da imagem) */
 .itl-captura{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.12);background:#0d0204;z-index:2}
 .itl-captura img{width:100%;height:100%;object-fit:cover;object-position:var(--foco,50% 0)}
+/* @componente itl-captura.rolagem · tela de produto mais alta que a moldura, que rola sozinha de cima para baixo, do início ao fim, dentro da moldura. Exige height na captura; a imagem ocupa a largura da moldura e a rolagem acompanha a altura real dela. Sem animação (PDF, ?estatico) mostra o topo */
+.itl-captura.rolagem img{position:absolute;left:0;top:0;width:100%;height:auto;object-fit:initial}
 /* @componente itl-imagens · 1 a 3 .itl-figura lado a lado (imagem inteira, sem corte, com legenda opcional em <figcaption>) */
 .itl-imagens{flex:1;min-height:0;display:flex;gap:var(--gap)}
 .itl-figura{flex:1;min-width:0;display:flex;flex-direction:column;gap:22px}
@@ -293,6 +295,7 @@ section.itl:has(>.itl-lateral) .itl-area{right:1060px}
 @keyframes itlPacote{0%{opacity:1;left:calc(50% / var(--n) - 10px)}96%{opacity:1}100%{opacity:0;left:calc(100% - 50% / var(--n) - 10px)}}
 @keyframes itlVarre{0%{transform:translateY(0)}50%{transform:translateY(var(--fim))}100%{transform:translateY(0)}}
 @keyframes itlVai{from{transform:translateY(0)}}
+@keyframes itlRola{from{top:0;transform:translateY(0)}to{top:100%;transform:translateY(-100%)}}
 @keyframes itlLetra{from{opacity:0;transform:translateY(45%) scale(1.35);filter:blur(14px)}}
 @keyframes itlClarao{0%{opacity:0;transform:scale(.2)}12%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
 @keyframes itlChoque{from{opacity:.95;transform:scale(.2)}to{opacity:0;transform:scale(4.2)}}
@@ -325,6 +328,7 @@ section.itl:has(>.itl-lateral) .itl-area{right:1060px}
 .run .itl-pessoa .itl-foto img{animation:itlCor 2.6s ease both;animation-delay:calc(.3s + var(--k) * .1s)}
 .run .itl-pessoa figcaption{animation:itlSobe .8s var(--ease) both;animation-delay:calc(.8s + var(--k) * .1s)}
 .run .itl-captura,.run .itl-figura>div{animation:itlInclina 1.7s var(--ease) both;animation-delay:calc(.4s + var(--k) * .3s)}
+.run .itl-captura.rolagem img{animation:itlRola 6s cubic-bezier(.45,.05,.4,1) 1.2s both}
 .run .itl-lateral{animation:itlCortinaE 1.3s var(--ease) .2s both}
 .run .itl-lateral img{animation:itlKb 8s ease-out .2s both}
 .run .itl-capa-shape{animation:itlShapeCapa 2.4s var(--ease) both}
